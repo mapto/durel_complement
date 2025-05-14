@@ -1,0 +1,12 @@
+services:
+  app:
+    image: python:3-slim-buster
+    ports:
+      - 8783:7861
+    volumes:
+      - .:/app
+    command: sh -c "pip install --no-cache-dir -r requirements.txt && ./app.py"
+    working_dir: /app
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"from urllib.request import urlopen; int(urlopen('http://localhost:7861').status >= 400)\""]
